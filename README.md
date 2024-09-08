@@ -18,6 +18,10 @@ In theory, this should work for other Zebra thermal printers, but I have only te
 ## Installation and Setup
 
 1. Download and unzip `Print Label.workflow.zip`
+  - Click `Print Label.workflow.zip` above
+  - Click the Download Raw File button
+
+  ![Download file](images/install-download.png)
 2. From Finder browse to `~/Library/PDF Services`
 
   - Click on the Finder app
