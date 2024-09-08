@@ -22,6 +22,7 @@ In theory, this should work for other Zebra thermal printers, but I have only te
   - Click the Download Raw File button
 
   ![Download file](images/install-download.png)
+
 2. From Finder browse to `~/Library/PDF Services`
 
   - Click on the Finder app
