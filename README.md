@@ -17,7 +17,7 @@ In theory, this should work for other Zebra thermal printers, but I have only te
 
 ## Installation and Setup
 
-1. Download and unzip [Print Label.workflow.zip](Print%20Label.workflow.zip?raw=true)
+1. Download and unzip [Print Label.workflow.zip](//github.com/john-stephens/zebra-mac-label-automator/releases/latest/download/Print.Label.workflow.zip)
 2. From Finder browse to `~/Library/PDF Services`
 
   - Click on the Finder app
