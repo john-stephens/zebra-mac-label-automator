@@ -48,23 +48,23 @@ The workflow is trying to find a printer name that starts with "Zebra" and doesn
 1. The driver for your Zebra printer is not installed. See: [Install CUPS Driver for Zebra Printer in Mac OS](https://supportcommunity.zebra.com/s/article/Install-CUPS-driver-for-Zebra-Printer-in-Mac-OS)
 2. The name of your Zebra printer does not start with "Zebra". You have two options here:
 
-  a. Rename your Zebra printer so that it starts with "Zebra". See [Renaming your printer](TODO).
+  a. Rename your Zebra printer so that it starts with "Zebra". See [Renaming your printer](#renaming-your-printer).
   
-  b. Set the `PRINTER` value in the workflow with your Zebra printer's device name. See [Editing the `PRINTER` value](TODO).
+  b. Set the `PRINTER` value in the workflow with your Zebra printer's device name. See [Editing the `PRINTER` value](#editing-the-printer-value).
 
 ### The workflow prints to the wrong Zebra printer
 
 The workflow is trying to find a printer name that starts with "Zebra" and it is picking the wrong one because there are multiple. You have a few options in this case:
 
-a. Rename the other printer so that the one you want to print to is the only one with a name that starts with "Zebra". See [Renaming your printer](TODO).
+a. Rename the other printer so that the one you want to print to is the only one with a name that starts with "Zebra". See [Renaming your printer](#renaming-your-printer).
 
-b. If only one device you want to print to, set the `PRINTER` value in the workflow with that Zebra printer's device name. See [Editing the `PRINTER` value](TODO).
+b. If only one device you want to print to, set the `PRINTER` value in the workflow with that Zebra printer's device name. See [Editing the `PRINTER` value](#editing-the-printer-value).
 
-c. If you want to print to multiple Zebra printers, make a copy of `Print Label.workflow`, one for each printer, and set the `PRINTER` value for each copy with the corresponding Zebra printer's device name. Make sure that you set the workflow to an appropriate filename so that you know which workflow corresponds to which printer. See [Editing the `PRINTER` value](TODO).
+c. If you want to print to multiple Zebra printers, make a copy of `Print Label.workflow`, one for each printer, and set the `PRINTER` value for each copy with the corresponding Zebra printer's device name. Make sure that you set the workflow to an appropriate filename so that you know which workflow corresponds to which printer. See [Editing the `PRINTER` value](#editing-the-printer-value).
 
 ### Error: "Printer "{YOUR-PRINTER-NAME}" not found."
 
-The `PRINTER` value at the top of the workflow was not set to the correct printer device name. Make sure that you have the correct device name value. See [Getting the device name for your printer](TODO) and [Editing the `PRINTER` value](TODO).
+The `PRINTER` value at the top of the workflow was not set to the correct printer device name. Make sure that you have the correct device name value. See [Getting the device name for your printer](#getting-the-device-name-for-your-printer) and [Editing the `PRINTER` value](#editing-the-printer-value).
 
 ### Error: "Failed to determine the printer DPI!"
 
@@ -114,7 +114,7 @@ b. Correct the path for `pdftoppm` or `pdfinfo` at the top of `Print Label.workf
   - Enter "~/Library/PDF Services" and press Enter
 
 2. Double-click on `Print Label.workflow` (extension may be hidden) to open it in Automator.
-4. At the top, fill in your device name as the value for `PRINTER`. See [Getting the device name for your printer](TODO).
+4. At the top, fill in your device name as the value for `PRINTER`. See [Getting the device name for your printer](#getting-the-device-name-for-your-printer).
 
   ![Paste device name](images/reference-automator-device-name.png)
 
