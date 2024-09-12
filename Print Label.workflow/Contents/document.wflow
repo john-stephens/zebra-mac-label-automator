@@ -59,17 +59,33 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>COMMAND_STRING</key>
-					<string>PRINTER="{YOUR_DEVICE_NAME}"
+					<string>PRINTER="" # Auto-detect by default
 
 IDENTIFY="/opt/homebrew/bin/identify"
 MAGICK="/opt/homebrew/bin/magick"
 PDFTOPPM="/opt/homebrew/bin/pdftoppm"
 PDFINFO="/opt/homebrew/bin/pdfinfo"
 
-# Check that the specified printer exists
-if ! lpstat -p "$PRINTER"; then
-  osascript -e "display dialog \"Printer \\\"$PRINTER\\\" not found.\n\nPlease check the \$PRINTER setting.\""
-  exit
+if [ -z "$PRINTER" ]; then
+  # Auto-detect the printer by looking for one that starts with "Zebra"
+  device_names=($(lpstat -p | awk '{print $2}'))
+
+  for device_name in "${device_names[@]}"; do
+    if lpstat -l -p "$device_name" | grep -q "Description: Zebra"; then
+      PRINTER="$device_name"
+    fi
+  done
+
+  if [ -z "$PRINTER" ]; then
+    osascript -e "display dialog \"Failed to auto-detect your Zebra printer.\n\nPlease set the \$PRINTER setting.\""
+    exit
+  fi
+else
+  # Check that the specified printer exists
+  if ! lpstat -p "$PRINTER"; then
+    osascript -e "display dialog \"Printer \\\"$PRINTER\\\" not found.\n\nPlease check the \$PRINTER setting.\""
+    exit
+  fi
 fi
 
 # Check that the required apps are installed
@@ -99,6 +115,7 @@ dpi="$(lpoptions -p "$PRINTER" -l | grep "^Resolution" | sed -E "s/^.*\*([0-9]+)
 # Verify that we got a proper resolution value
 if [[ ! "$dpi" =~ ^[0-9]+$ ]]; then
   osascript -e "display dialog \"Failed to determine the printer DPI!\""
+  exit
 fi
 
 for f in "$@"; do
@@ -112,6 +129,7 @@ for f in "$@"; do
   # Validate that the media exists
   if ! lpoptions -p "$PRINTER" -l | grep -qE "^PageSize\/Media Size: .* $media( |\$)"; then
     osascript -e "display dialog \"Failed to determine the printer media!\""
+    exit
   fi
 
   # Extract each page at the printer DPI, apply thresholding, then print
@@ -234,7 +252,7 @@ done
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>309.000000:523.000000</string>
+				<string>309.000000:639.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
