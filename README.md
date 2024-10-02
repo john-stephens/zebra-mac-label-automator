@@ -30,6 +30,8 @@ In theory, this should work for other Zebra thermal printers, but I have only te
 
 ## Usage
 
+### General
+
 1. Open the label you want to print. (If you need to crop, I recommend opening the label in Preview: click the Markup button, click the selection tool, select the area you want to print, click Tools > Crop (⌘ K))
 2. Go to print your label, but don’t actually print. This should be done using the system print dialog.
 3. Select your Zebra printer as the printer you want to print from.
@@ -38,6 +40,16 @@ In theory, this should work for other Zebra thermal printers, but I have only te
   ![Print dialog](images/usage-print-dialog.png)
 6. From the dropdown on the bottom-left, click "Print Label".
   ![Print dialog menu](images/usage-print-dialog-menu.png)
+
+### Chrome
+
+Chrome has its own print dialog which does not make the Automation workflows available. While Chrome does have a "Print using System Dialog" option, there is no preview and it occasionally does not trigger the Automation workflows when selected.
+
+1. Start the process to print your label.
+2. Select your Zebra printer as the printer you want to print from.
+3. Set the paper size to label size you are using. (i.e. 4x6in)
+4. Click "Open in Preview" option from the print dialog.
+5. Follow the [General](#general) process above.
 
 ## Troubleshooting
 
