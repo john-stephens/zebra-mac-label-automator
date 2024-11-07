@@ -128,7 +128,7 @@ for f in "$@"; do
 
   # Validate that the media exists
   if ! lpoptions -p "$PRINTER" -l | grep -qE "^PageSize\/Media Size: .* $media( |\$)"; then
-    osascript -e "display dialog \"Failed to determine the printer media!\""
+    osascript -e "display dialog \"Failed to determine the printer media! ($media, $width, $height)\""
     exit
   fi
 
@@ -252,7 +252,7 @@ done
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>309.000000:639.000000</string>
+				<string>529.000000:592.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
