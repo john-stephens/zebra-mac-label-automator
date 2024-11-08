@@ -119,8 +119,8 @@ if [[ ! "$dpi" =~ ^[0-9]+$ ]]; then
 fi
 
 for f in "$@"; do
-  # Determine the media to use based on the label size
-  read width height resolution &lt;&lt;&lt; "$($IDENTIFY -format "%w %h %x" "$f")"
+  # Determine the media to use based on the label size (assumes all pages are the same)
+  read width height resolution &lt;&lt;&lt; "$($IDENTIFY -format "%w %h %x\n" "$f" | head -n 1)"
 
   page_width="$(echo "scale=2; $width / $resolution * 72" | bc | sed -e "s/\..*$//")"
   page_height="$(echo "scale=2; $height / $resolution * 72" | bc | sed -e "s/\..*$//")"
