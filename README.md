@@ -2,13 +2,18 @@
 
 ## Introduction
 
-Can you get a high quality label out of your Zebra GX420d thermal printer on your Mac without paying for expensive software? Yes!
+Can you get a high quality label out of your Zebra thermal printer on your Mac without paying for expensive software? Yes!
 
-The Zebra GX420d is very picky about image size and colors that are not black or white. Simply resizing your label or using anti-aliasing will introduce gray colors and result in a blurry print. Your label may even have gray colors to begin with.
+The Zebra printer is very picky about image size and colors that are not black or white. Simply resizing your label or using anti-aliasing will introduce gray colors and result in a blurry print. Your label may even have gray colors to begin with.
 
 I fixed this by creating an Automator workflow that uses Poppler and ImageMagic to remove the gray colors by applying thresholding. The result is a nice crisp label!
 
-In theory, this should work for other Zebra thermal printers, but I have only tested it with my GX420d. If it works (or doesn't work) for the model you have, I would appreciate your feedback so that I can create a list of supported printers and add support if needed. Head over to the [Discussions](https://github.com/john-stephens/zebra-mac-label-automator/discussions) section and let me know.
+## Tested Printers
+
+- GX420d
+- ZD230
+
+If it works (or doesn't work) for the model you have, I would appreciate your feedback so that I can fill in the list of tested printers and add support if needed. Head over to the [Discussions](https://github.com/john-stephens/zebra-mac-label-automator/discussions) section and let me know.
 
 ## Pre-requisites
 
