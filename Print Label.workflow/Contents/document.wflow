@@ -122,13 +122,13 @@ for f in "$@"; do
   # Determine the media to use based on the label size
   read width height resolution &lt;&lt;&lt; "$($IDENTIFY -format "%w %h %x" "$f")"
 
-  page_width="$(bc -e "scale=2; $width / $resolution * 72" | sed -e "s/\..*$//")"
-  page_height="$(bc -e "scale=2; $height / $resolution * 72" | sed -e "s/\..*$//")"
+  page_width="$(echo "scale=2; $width / $resolution * 72" | bc | sed -e "s/\..*$//")"
+  page_height="$(echo "scale=2; $height / $resolution * 72" | bc | sed -e "s/\..*$//")"
   media="w${page_width}h${page_height}"
 
   # Validate that the media exists
   if ! lpoptions -p "$PRINTER" -l | grep -qE "^PageSize\/Media Size: .* $media( |\$)"; then
-    osascript -e "display dialog \"Failed to determine the printer media! ($media, $width, $height)\""
+    osascript -e "display dialog \"Failed to determine the printer media! ($media, $width, $height, $resolution)\""
     exit
   fi
 
@@ -252,7 +252,7 @@ done
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>529.000000:592.000000</string>
+				<string>309.000000:592.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
