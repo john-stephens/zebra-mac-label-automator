@@ -136,7 +136,7 @@ for f in "$@"; do
   pages="$($PDFINFO "$f" | grep "^Pages:" | sed -e "s/^Pages:[ \\t]*//")"
 
   for ((page=1; page &lt;= $pages; page++)); do
-    $PDFTOPPM -f $page -l $page -r $dpi -aa no -aaVector no -gray "$f" | $MAGICK - -colorspace gray -color-threshold 'gray(90%)-gray(100%)' -density $dpi -compress none tiff:- | lpr -P "$PRINTER" -o portrait -o media="$media"
+    $PDFTOPPM -f $page -l $page -r $dpi -aa no -aaVector no -gray "$f" | $MAGICK - -colorspace gray -color-threshold 'gray(50%)-gray(100%)' -density $dpi -compress none tiff:- | lpr -P "$PRINTER" -o portrait -o media="$media"
   done
 done
 </string>
