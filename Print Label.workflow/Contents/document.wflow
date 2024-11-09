@@ -132,12 +132,22 @@ for f in "$@"; do
     exit
   fi
 
-  # Extract each page at the printer DPI, apply thresholding, then print
-  pages="$($PDFINFO "$f" | grep "^Pages:" | sed -e "s/^Pages:[ \\t]*//")"
+  # Create a temp dir to extract all of the pages into
+  tmpdir=$(mktemp -d)
 
-  for ((page=1; page &lt;= $pages; page++)); do
-    $PDFTOPPM -f $page -l $page -r $dpi -aa no -aaVector no -gray "$f" | $MAGICK - -colorspace gray -color-threshold 'gray(50%)-gray(100%)' -density $dpi -compress none tiff:- | lpr -P "$PRINTER" -o portrait -o media="$media"
-  done
+  if [[ "$?" -gt 0 ]]; then
+    osascript -e "display dialog \"Failed to create temp dir!\""
+    exit
+  fi
+
+  # Extract all of the pages
+  $PDFTOPPM -r $dpi -aa no -aaVector no -gray "$f" $tmpdir/page
+
+  # Apply thresholding to all pages and spool to the printer
+  $MAGICK $tmpdir/page* -colorspace gray -color-threshold 'gray(50%)-gray(100%)' -density $dpi -compress none pdf:- | lpr -P "$PRINTER" -o portrait -o media="$media"
+
+  # Cleanup
+  rm -rf "$tmpdir"
 done
 </string>
 					<key>CheckedForUserDefaultShell</key>
@@ -252,7 +262,7 @@ done
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>309.000000:621.000000</string>
+				<string>529.000000:621.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
