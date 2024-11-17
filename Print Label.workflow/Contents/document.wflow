@@ -59,7 +59,8 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>COMMAND_STRING</key>
-					<string>PRINTER="" # Auto-detect by default
+					<string>#!/bin/bash
+PRINTER="" # Auto-detect by default
 
 IDENTIFY="/opt/homebrew/bin/identify"
 MAGICK="/opt/homebrew/bin/magick"
@@ -89,25 +90,13 @@ else
 fi
 
 # Check that the required apps are installed
-if ! command -v "$IDENTIFY" &gt; /dev/null 2&gt;&amp;1; then
-  osascript -e "display dialog \"\\\"$IDENTIFY\\\" not found.\n\nPlease verify that ImageMagick is installed.\""
-  exit
-fi
-
-if ! command -v "$MAGICK" &gt; /dev/null 2&gt;&amp;1; then
-  osascript -e "display dialog \"\\\"$MAGICK\\\" not found.\n\nPlease verify that ImageMagick is installed.\""
-  exit
-fi
-
-if ! command -v "$PDFTOPPM" &gt; /dev/null 2&gt;&amp;1; then
-  osascript -e "display dialog \"\\\"$PDFTOPPM\\\" not found.\n\nPlease verify that Poppler is installed.\""
-  exit
-fi
-
-if ! command -v "$PDFINFO" &gt; /dev/null 2&gt;&amp;1; then
-  osascript -e "display dialog \"\\\"$PDFINFO\\\" not found.\n\nPlease verify that Poppler is installed.\""
-  exit
-fi
+required_commands=("$IDENTIFY" "$MAGICK" "$PDFTOPPM" "$PDFINFO")
+for cmd in "${required_commands[@]}"; do
+  if ! command -v "$cmd" &gt; /dev/null 2&gt;&amp;1; then
+    osascript -e "display dialog \"\\\"$cmd\\\" not found.\n\nPlease verify that it is installed.\""
+    exit
+  fi
+done
 
 # Determine the printer resolution
 dpi="$(lpoptions -p "$PRINTER" -l | grep "^Resolution" | sed -E "s/^.*\*([0-9]+)dpi.*/\1/g")"
@@ -162,7 +151,6 @@ for f in "$@"; do
 
   # Create a temp dir to extract all of the pages into
   tmpdir=$(mktemp -d)
-
   if [[ "$?" -gt 0 ]]; then
     osascript -e "display dialog \"Failed to create temp dir!\""
     exit
