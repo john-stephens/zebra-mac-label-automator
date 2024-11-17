@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>AMApplicationBuild</key>
-	<string>523</string>
+	<string>526</string>
 	<key>AMApplicationVersion</key>
 	<string>2.10</string>
 	<key>AMDocumentVersion</key>
@@ -118,19 +118,47 @@ if [[ ! "$dpi" =~ ^[0-9]+$ ]]; then
   exit
 fi
 
+is_media_available() {
+  local media_to_check="$1"
+  if echo "$available_media" | grep -qw "$media_to_check"; then
+    return 0  # Found exact media
+  elif echo "$available_media" | grep -qw "Custom.WIDTHxHEIGHT"; then
+    return 2  # Found Custom.WIDTHxHEIGHT
+  else
+    return 1  # Not found
+  fi
+}
+
 for f in "$@"; do
   # Determine the media to use based on the label size (assumes all pages are the same)
   read width height resolution &lt;&lt;&lt; "$($IDENTIFY -format "%w %h %x\n" "$f" | head -n 1)"
-
-  page_width="$(echo "scale=2; $width / $resolution * 72" | bc | sed -e "s/\..*$//")"
-  page_height="$(echo "scale=2; $height / $resolution * 72" | bc | sed -e "s/\..*$//")"
+  
+  available_media=$(lpoptions -p "$PRINTER" -l | \
+    grep "^PageSize/Media Size:" | \
+    cut -d: -f2 | \
+    tr ' ' '\n' | \
+    sed 's/^\*//'
+  )
+  echo "Available media: ${available_media}"
+  
+  page_width="$(printf "%.0f" "$(echo "$width / $resolution * 72" | bc -l)")"
+  page_height="$(printf "%.0f" "$(echo "$height / $resolution * 72" | bc -l)")"
   media="w${page_width}h${page_height}"
-
+  
   # Validate that the media exists
-  if ! lpoptions -p "$PRINTER" -l | grep -qE "^PageSize\/Media Size:.* [\*]?$media( |\$)"; then
+  is_media_available "$media"
+  media_status=$?
+  if [ $media_status -eq 0 ]; then
+    # Use $media as is
+    :
+  elif [ $media_status -eq 2 ]; then
+    # Custom.WIDTHxHEIGHT is available, substitute WIDTH and HEIGHT
+    media="Custom.${page_width}x${page_height}"
+  else
     osascript -e "display dialog \"Failed to determine the printer media! ($media, $width, $height, $resolution)\""
     exit
   fi
+  echo "Selected media size ${media}"
 
   # Create a temp dir to extract all of the pages into
   tmpdir=$(mktemp -d)
@@ -148,8 +176,7 @@ for f in "$@"; do
 
   # Cleanup
   rm -rf "$tmpdir"
-done
-</string>
+done</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>
@@ -262,7 +289,7 @@ done
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>529.000000:621.000000</string>
+				<string>698.000000:935.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
