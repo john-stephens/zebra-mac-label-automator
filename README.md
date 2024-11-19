@@ -11,6 +11,7 @@ I fixed this by creating an Automator workflow that uses Poppler and ImageMagic 
 ## Tested Printers
 
 - GX420d
+- LP2844
 - ZD230
 
 If it works (or doesn't work) for the model you have, I would appreciate your feedback so that I can fill in the list of tested printers and add support if needed. Head over to the [Discussions](https://github.com/john-stephens/zebra-mac-label-automator/discussions) section and let me know.
