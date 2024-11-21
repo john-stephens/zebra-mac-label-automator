@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>AMApplicationBuild</key>
-	<string>526</string>
+	<string>523</string>
 	<key>AMApplicationVersion</key>
 	<string>2.10</string>
 	<key>AMDocumentVersion</key>
@@ -59,13 +59,17 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>COMMAND_STRING</key>
-					<string>#!/bin/bash
-PRINTER="" # Auto-detect by default
+					<string>PRINTER="" # Auto-detect by default
 
 IDENTIFY="/opt/homebrew/bin/identify"
 MAGICK="/opt/homebrew/bin/magick"
 PDFTOPPM="/opt/homebrew/bin/pdftoppm"
 PDFINFO="/opt/homebrew/bin/pdfinfo"
+
+# Utility function to show an error message
+show_error() {
+  osascript -e "display dialog \"$1\""
+}
 
 if [ -z "$PRINTER" ]; then
   # Auto-detect the printer by looking for one that starts with "Zebra"
@@ -78,22 +82,23 @@ if [ -z "$PRINTER" ]; then
   done
 
   if [ -z "$PRINTER" ]; then
-    osascript -e "display dialog \"Failed to auto-detect your Zebra printer.\n\nPlease set the \$PRINTER setting.\""
+    show_error "Failed to auto-detect your Zebra printer.\n\nPlease set the \$PRINTER setting."
     exit
   fi
 else
   # Check that the specified printer exists
   if ! lpstat -p "$PRINTER"; then
-    osascript -e "display dialog \"Printer \\\"$PRINTER\\\" not found.\n\nPlease check the \$PRINTER setting.\""
+    show_error "Printer \\\"$PRINTER\\\" not found.\n\nPlease check the \$PRINTER setting."
     exit
   fi
 fi
 
 # Check that the required apps are installed
 required_commands=("$IDENTIFY" "$MAGICK" "$PDFTOPPM" "$PDFINFO")
+
 for cmd in "${required_commands[@]}"; do
   if ! command -v "$cmd" &gt; /dev/null 2&gt;&amp;1; then
-    osascript -e "display dialog \"\\\"$cmd\\\" not found.\n\nPlease verify that it is installed.\""
+    show_error "\\\"$cmd\\\" not found.\n\nPlease verify that it is installed."
     exit
   fi
 done
@@ -103,56 +108,41 @@ dpi="$(lpoptions -p "$PRINTER" -l | grep "^Resolution" | sed -E "s/^.*\*([0-9]+)
 
 # Verify that we got a proper resolution value
 if [[ ! "$dpi" =~ ^[0-9]+$ ]]; then
-  osascript -e "display dialog \"Failed to determine the printer DPI!\""
+  show_error "Failed to determine the printer DPI!"
   exit
 fi
-
-is_media_available() {
-  local media_to_check="$1"
-  if echo "$available_media" | grep -qw "$media_to_check"; then
-    return 0  # Found exact media
-  elif echo "$available_media" | grep -qw "Custom.WIDTHxHEIGHT"; then
-    return 2  # Found Custom.WIDTHxHEIGHT
-  else
-    return 1  # Not found
-  fi
-}
 
 for f in "$@"; do
   # Determine the media to use based on the label size (assumes all pages are the same)
   read width height resolution &lt;&lt;&lt; "$($IDENTIFY -format "%w %h %x\n" "$f" | head -n 1)"
-  
+
+  page_width="$(printf "%.0f" "$(echo "$width / $resolution * 72" | bc -l)")"
+  page_height="$(printf "%.0f" "$(echo "$height / $resolution * 72" | bc -l)")"
+  media="w${page_width}h${page_height}"
+
+  # Determine the available media options  
   available_media=$(lpoptions -p "$PRINTER" -l | \
     grep "^PageSize/Media Size:" | \
     cut -d: -f2 | \
     tr ' ' '\n' | \
     sed 's/^\*//'
   )
-  echo "Available media: ${available_media}"
-  
-  page_width="$(printf "%.0f" "$(echo "$width / $resolution * 72" | bc -l)")"
-  page_height="$(printf "%.0f" "$(echo "$height / $resolution * 72" | bc -l)")"
-  media="w${page_width}h${page_height}"
-  
-  # Validate that the media exists
-  is_media_available "$media"
-  media_status=$?
-  if [ $media_status -eq 0 ]; then
-    # Use $media as is
-    :
-  elif [ $media_status -eq 2 ]; then
-    # Custom.WIDTHxHEIGHT is available, substitute WIDTH and HEIGHT
-    media="Custom.${page_width}x${page_height}"
-  else
-    osascript -e "display dialog \"Failed to determine the printer media! ($media, $width, $height, $resolution)\""
-    exit
+
+  # Validate that the media exists or use a custom media if supported
+  if ! echo "$available_media" | grep -qw "$media"; then
+    if echo "$available_media" | grep -qw "Custom.WIDTHxHEIGHT"; then
+      media="Custom.${page_width}x${page_height}"
+    else
+      show_error "Failed to determine the printer media! ($media, $width, $height, $resolution)"
+      exit
+    fi
   fi
-  echo "Selected media size ${media}"
 
   # Create a temp dir to extract all of the pages into
   tmpdir=$(mktemp -d)
+
   if [[ "$?" -gt 0 ]]; then
-    osascript -e "display dialog \"Failed to create temp dir!\""
+    show_error "Failed to create temp dir!"
     exit
   fi
 
@@ -164,7 +154,8 @@ for f in "$@"; do
 
   # Cleanup
   rm -rf "$tmpdir"
-done</string>
+done
+</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>
@@ -277,7 +268,7 @@ done</string>
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>698.000000:935.000000</string>
+				<string>529.000000:602.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
