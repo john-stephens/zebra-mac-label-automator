@@ -24,15 +24,16 @@ If it works (or doesn't work) for the model you have, I would appreciate your fe
 ## Installation and Setup
 
 1. Download and unzip [Print Label.workflow.zip](//github.com/john-stephens/zebra-mac-label-automator/releases/latest/download/Print.Label.workflow.zip)
-2. From Finder browse to `~/Library/PDF Services`
+2. From Finder browse to `~/Library`
 
   - Click on the Finder app
   - Click Go > Go to Folder... (⇧ ⌘ G)
-  - Enter "~/Library/PDF Services" and press Enter
+  - Enter "~/Library" and press Enter
 
   ![Browse in Finder](images/install-finder-browse.png)
 
-3. Drag `Print Label.workflow` (extension may be hidden) into the `PDF Services` folder. You are all set!
+3. Create a folder named `PDF Services` if it does not already exist 
+4. Drag `Print Label.workflow` (extension may be hidden) into the `PDF Services` folder. You are all set!
 
 ## Usage
 
