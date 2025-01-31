@@ -10,6 +10,7 @@ I fixed this by creating an Automator workflow that uses Poppler and ImageMagic 
 
 ## Tested Printers
 
+- GK420d
 - GX420d
 - LP2844
 - ZD230
