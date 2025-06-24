@@ -61,6 +61,16 @@ Chrome has its own print dialog which does not make the Automation workflows ava
 4. Click "Open in Preview" option from the print dialog.
 5. Follow the [General](#general) process above.
 
+### Firefox
+
+Firefox has its own print dialog which does not make the Automation workflows available. You will need to use the "Print using the system dialog..." option in order to use the Automation workflow.
+
+1. Start the process to print your label.
+2. Select your Zebra printer as the printer you want to print from.
+3. Set the paper size to label size you are using. (i.e. 4x6in)
+4. Click "Print using the system dialog..." option from the print dialog.
+5. Follow the [General](#general) process above.
+
 ## Troubleshooting
 
 ### Error: "Failed to auto-detect your Zebra printer."
