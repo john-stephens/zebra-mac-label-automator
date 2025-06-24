@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>AMApplicationBuild</key>
-	<string>523</string>
+	<string>528</string>
 	<key>AMApplicationVersion</key>
 	<string>2.10</string>
 	<key>AMDocumentVersion</key>
@@ -76,7 +76,7 @@ if [ -z "$PRINTER" ]; then
   device_names=($(lpstat -p | awk '{print $2}'))
 
   for device_name in "${device_names[@]}"; do
-    if lpstat -l -p "$device_name" | grep -q "Description: Zebra"; then
+    if lpstat -l -p "$device_name" | grep -qE "(Description|Omschrijving): Zebra"; then
       PRINTER="$device_name"
     fi
   done
@@ -113,6 +113,7 @@ if [[ ! "$dpi" =~ ^[0-9]+$ ]]; then
 fi
 
 for f in "$@"; do
+echo $f &gt;&gt; /tmp/workflow.tmp
   # Determine the media to use based on the label size (assumes all pages are the same)
   read width height resolution &lt;&lt;&lt; "$($IDENTIFY -format "%w %h %x\n" "$f" | head -n 1)"
 
@@ -268,7 +269,7 @@ done
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>529.000000:602.000000</string>
+				<string>529.000000:630.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
