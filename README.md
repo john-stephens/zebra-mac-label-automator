@@ -22,7 +22,7 @@ If it works (or doesn't work) for the model you have, I would appreciate your fe
 ## Pre-requisites
 
 1. Your Zebra printer has already been set up. See: [Install CUPS Driver for Zebra Printer in Mac OS](https://supportcommunity.zebra.com/s/article/Install-CUPS-driver-for-Zebra-Printer-in-Mac-OS)
-2. Poppler and ImageMagick have been installed. It is assumed that these have been installed using [Homebrew](https://brew.sh). (`brew install poppler imagemagick`)
+2. Poppler, ImageMagick, and Ghostscript have been installed. It is assumed that these have been installed using [Homebrew](https://brew.sh). (`brew install poppler imagemagick ghostscript`)
 
 ## Installation and Setup
 

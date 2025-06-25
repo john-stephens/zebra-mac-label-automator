@@ -61,10 +61,11 @@
 					<key>COMMAND_STRING</key>
 					<string>PRINTER="" # Auto-detect by default
 
-IDENTIFY="/opt/homebrew/bin/identify"
-MAGICK="/opt/homebrew/bin/magick"
-PDFTOPPM="/opt/homebrew/bin/pdftoppm"
-PDFINFO="/opt/homebrew/bin/pdfinfo"
+PATH="$PATH:/opt/homebrew/bin/"
+IDENTIFY="identify"
+MAGICK="magick"
+PDFTOPPM="pdftoppm"
+PDFINFO="pdfinfo"
 
 # Utility function to show an error message
 show_error() {
@@ -113,7 +114,6 @@ if [[ ! "$dpi" =~ ^[0-9]+$ ]]; then
 fi
 
 for f in "$@"; do
-echo $f &gt;&gt; /tmp/workflow.tmp
   # Determine the media to use based on the label size (assumes all pages are the same)
   read width height resolution &lt;&lt;&lt; "$($IDENTIFY -format "%w %h %x\n" "$f" | head -n 1)"
 
@@ -269,7 +269,7 @@ done
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>529.000000:630.000000</string>
+				<string>529.000000:600.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
