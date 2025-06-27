@@ -61,7 +61,7 @@
 					<key>COMMAND_STRING</key>
 					<string>PRINTER="" # Auto-detect by default
 
-PATH="$PATH:/opt/homebrew/bin/"
+PATH="$PATH:/opt/homebrew/bin:/usr/local/bin"
 IDENTIFY="identify"
 MAGICK="magick"
 PDFTOPPM="pdftoppm"
@@ -269,7 +269,7 @@ done
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>529.000000:600.000000</string>
+				<string>529.000000:586.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
