@@ -53,11 +53,12 @@ If it works (or doesn't work) for the model you have, I would appreciate your fe
   ![Print dialog](images/usage-print-dialog.png)
 
 6. From the dropdown on the bottom-left, click "Print Label".
+7. Enter the number of copies when prompted by the workflow.
 
   ![Print dialog menu](images/usage-print-dialog-menu.png)
 
 > [!NOTE]
-> Printing more than 1 copy at a time is not supported. This is because MacOS does not pass through the number of copies to Automator.
+> The number of copies from the MacOS print dialog is not passed through to Automator. The workflow will prompt you for the number of copies after you select "Print Label".
 
 > [!TIP]
 > If you need to crop, I recommend opening the label in Preview: click the Markup button, click the selection tool, select the area you want to print, click Tools > Crop (⌘ K)
