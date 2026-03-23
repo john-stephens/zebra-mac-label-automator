@@ -75,7 +75,7 @@ show_error() {
 prompt_for_copies() {
   osascript \
     -e 'try' \
-    -e 'text returned of (display dialog "How many copies would you like to print?" default answer "1" buttons {"Cancel", "Print"} default button "Print")' \
+    -e 'text returned of (display dialog "The number of copies from the previous print dialog is not available to this workflow.\n\nPlease enter the number of copies here:" default answer "1" buttons {"Cancel", "Print"} default button "Print")' \
     -e 'on error number -128' \
     -e 'return "__CANCELLED__"' \
     -e 'end try'
