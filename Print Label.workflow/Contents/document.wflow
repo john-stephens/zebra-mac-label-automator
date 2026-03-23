@@ -72,6 +72,15 @@ show_error() {
   osascript -e "display dialog \"$1\""
 }
 
+prompt_for_copies() {
+  osascript \
+    -e 'try' \
+    -e 'text returned of (display dialog "The number of copies from the previous print dialog is not available to this workflow.\n\nPlease enter the number of copies here:" default answer "1" buttons {"Cancel", "Print"} default button "Print")' \
+    -e 'on error number -128' \
+    -e 'return "__CANCELLED__"' \
+    -e 'end try'
+}
+
 if [ -z "$PRINTER" ]; then
   # Auto-detect the printer by looking for one that starts with "Zebra"
   device_names=($(lpstat -p | awk '{print $2}'))
@@ -113,6 +122,17 @@ if [[ ! "$dpi" =~ ^[0-9]+$ ]]; then
   exit
 fi
 
+copies="$(prompt_for_copies)"
+
+if [ "$copies" = "__CANCELLED__" ]; then
+  exit
+fi
+
+if [[ ! "$copies" =~ ^[1-9][0-9]*$ ]]; then
+  show_error "Invalid number of copies: \"$copies\"\n\nPlease enter a whole number greater than 0."
+  exit
+fi
+
 for f in "$@"; do
   # Determine the media to use based on the label size (assumes all pages are the same)
   read width height resolution &lt;&lt;&lt; "$($IDENTIFY -format "%w %h %x\n" "$f" | head -n 1)"
@@ -151,7 +171,7 @@ for f in "$@"; do
   $PDFTOPPM -r $dpi -aa no -aaVector no -gray "$f" $tmpdir/page
 
   # Apply thresholding to all pages and spool to the printer
-  $MAGICK $tmpdir/page* -colorspace gray -color-threshold 'gray(50%)-gray(100%)' -density $dpi -compress none pdf:- | lpr -P "$PRINTER" -o portrait -o media="$media"
+  $MAGICK $tmpdir/page* -colorspace gray -color-threshold 'gray(50%)-gray(100%)' -density $dpi -compress none pdf:- | lpr -# "$copies" -P "$PRINTER" -o portrait -o media="$media"
 
   # Cleanup
   rm -rf "$tmpdir"
